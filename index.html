@@ -10,11 +10,12 @@
 button{font:inherit;color:inherit;cursor:pointer}button:focus-visible{outline:3px solid var(--blue);outline-offset:6px}.about-button{background:#09121c99;border:1px solid #ffffff80;border-radius:30px;padding:13px 22px;font-size:11px;letter-spacing:2px;transition:background .2s}.about-button:hover{background:#ffffff20}dialog{color:var(--ink);background:#0d1c29;border:1px solid #66e2ef55;border-radius:20px;width:min(700px,calc(100% - 32px));max-height:85svh;padding:clamp(28px,5vw,60px);box-shadow:0 24px 100px #0009}dialog::backdrop{background:#020810cc;backdrop-filter:blur(8px)}dialog h2{font-size:clamp(30px,5vw,48px);line-height:1.1;letter-spacing:-1.5px;margin:18px 0 28px}dialog p{color:#c5cdd5;line-height:1.8;font-size:16px}dialog .welcome{color:var(--pink);font-weight:700}.close-dialog{position:absolute;right:16px;top:12px;background:transparent;border:0;border-radius:50%;width:40px;height:40px;font-size:28px}
 @media(max-width:650px){.hero{min-height:auto;background:#09121c}.hero nav{order:0}.hero::before{content:"";display:block;order:1;width:100%;aspect-ratio:8/5;background:url('ocean-drive.png') center/contain no-repeat}.hero-bottom{order:2;margin-top:0;padding-top:28px}.hero-bottom h1{max-width:none}}
 .nav-actions{display:flex;align-items:center;gap:12px}.nav-actions .about-button{display:inline-flex;align-items:center;justify-content:center;min-height:44px;white-space:nowrap}@media(max-width:650px){.hero nav{flex-wrap:wrap;gap:18px}.nav-actions{gap:8px}.nav-actions .about-button{padding:12px 14px;font-size:10px;letter-spacing:1px}}
+.artist-dialog{width:min(980px,calc(100% - 24px))}.artist-layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:32px;margin-top:25px}.artist-photo{width:100%;height:auto;border-radius:10px;display:block}.artist-dialog h2{font-size:clamp(44px,7vw,76px);margin:12px 0}.artist-dialog h3{font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--blue);margin-top:28px}.artist-dialog p{font-size:15px;line-height:1.7}.artist-meta{color:var(--pink)!important}.artist-links{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}.artist-links a{display:inline-block}.artist-caption{font-size:11px!important;color:var(--muted)!important}.nav-actions{flex-wrap:wrap}@media(max-width:650px){.artist-layout{grid-template-columns:1fr}.artist-photo{max-height:420px;object-fit:contain;background:#081019}.hero nav{justify-content:center}.brand{margin-right:auto}.nav-actions{justify-content:center}.nav-actions .about-button{padding:12px 11px;font-size:9px}.artist-dialog{padding:28px 22px}}
 </style>
 </head>
 <body>
 <header class="hero">
-<nav aria-label="Navegación principal"><a class="brand" href="#" aria-label="MIAMI 305 Records, inicio">MIAMI 305<span>RECORDS</span></a><div class="nav-actions"><a class="about-button" href="https://www.beatport.com/es/label/miami-305/99171" target="_blank" rel="noopener noreferrer" aria-label="Releases en Beatport (abre en una pestaña nueva)">RELEASES</a><button class="about-button" type="button" id="about-open" aria-haspopup="dialog" aria-controls="about-dialog">ABOUT US</button></div></nav>
+<nav aria-label="Navegación principal"><a class="brand" href="#" aria-label="MIAMI 305 Records, inicio">MIAMI 305<span>RECORDS</span></a><div class="nav-actions"><button class="about-button" type="button" id="artist-open" aria-haspopup="dialog" aria-controls="artist-dialog">ARTIST</button><a class="about-button" href="https://www.beatport.com/es/label/miami-305/99171" target="_blank" rel="noopener noreferrer" aria-label="Releases en Beatport (abre en una pestaña nueva)">RELEASES</a><button class="about-button" type="button" id="about-open" aria-haspopup="dialog" aria-controls="about-dialog">ABOUT US</button></div></nav>
 <div class="hero-bottom"><div><div class="eyebrow">MIAMI · 305 · RECORDS</div><h1>El pulso de Miami.<br>Una identidad propia.</h1></div><a class="explore" href="#identidad">Descubre el 305 <span aria-hidden="true">↓</span></a></div>
 </header>
 <main><section class="intro" id="identidad" aria-labelledby="intro-title"><div class="eyebrow">01 / Nuestra identidad<br>Inspiración sin fronteras</div><div><h2 id="intro-title">La ciudad inspira.<br>El <em>305</em> nos define.</h2><p>Palmeras, neón y el carácter de Ocean Drive. Una imagen que conecta MIAMI 305 Records con la energía de Miami, del primer vistazo al último detalle.</p></div></section></main>
@@ -27,7 +28,26 @@ button{font:inherit;color:inherit;cursor:pointer}button:focus-visible{outline:3p
 <p class="welcome">Welcome to the Miami 305 Recordings family!</p>
 <p>The sounds of Africa meet Latin flavor on the most talented platform in the genre. Join our family, showcase your talent, and let the world enjoy your music.</p>
 </dialog>
+<dialog class="artist-dialog" id="artist-dialog" aria-labelledby="artist-title" lang="en">
+<button class="close-dialog" id="artist-close" type="button" aria-label="Close artist profile" autofocus>×</button>
+<div class="eyebrow">ARTIST / 01</div>
+<div class="artist-layout"><div><img class="artist-photo" src="mr-maui.jpeg" alt="Portrait of DJ and producer Mr. Maui" width="1766" height="2560" loading="lazy"><p class="artist-caption">Photo: Twentysix Agency</p></div>
+<article><h2 id="artist-title">MR. MAUI</h2><p class="artist-meta">Gran Canaria, Spain · Active since 2022<br>Afro House / Organic House / Afro Latino · 120–125 BPM</p>
+<h3>Biography</h3><p>A Canary Islands DJ and producer with a background in live drumming and percussion, Mr. Maui builds his sound around organic textures, tribal rhythms and Atlantic warmth. His work brings electronic and organic music together through immersive events and DJ sets.</p>
+<h3>Stages &amp; collaborations</h3><p>His appearances include Blue Marlin Ibiza Sky Lounge’s Amazona residency, Selvática, Tropicalia, Papagayo, Hanoi Club and BAKKARA in Las Palmas, with international performances in Africa. He has shared lineups with DJ Chus, G. Zamora, M.E.M.O., Aaron Sevilla, Macarena Hoffman, Wildness Rose and Claudia León.</p>
+<h3>Labels &amp; releases</h3><p>His catalogue includes Café de Anatolia, YHV Records, Caelum Records, Exx Chill, Selvática Records, Batuque Records and Native Music. Featured releases: UMAII, Shadow, Maobak, Ngona and Under The Moonlight.</p>
+<p>Worldwide representation: Twentysix Agency.</p>
+<div class="artist-links"><a class="about-button" href="https://twentysix-agency.com/booking/?artist=Mr.+Maui" target="_blank" rel="noopener noreferrer">BOOKING ↗</a><a class="nav-link" href="https://twentysix-agency.com/mrmaui/" target="_blank" rel="noopener noreferrer">Original profile ↗</a></div>
+</article></div></dialog>
 <script>
+const artistDialog = document.getElementById('artist-dialog');
+document.getElementById('artist-open').addEventListener('click', () => artistDialog.showModal());
+document.getElementById('artist-close').addEventListener('click', () => artistDialog.close());
+artistDialog.addEventListener('click', event => {
+  const box = artistDialog.getBoundingClientRect();
+  if (event.target === artistDialog && (event.clientX < box.left || event.clientX > box.right || event.clientY < box.top || event.clientY > box.bottom)) artistDialog.close();
+});
+artistDialog.addEventListener('close', () => document.getElementById('artist-open').focus());
 const aboutDialog = document.getElementById('about-dialog');
 document.getElementById('about-open').addEventListener('click', () => aboutDialog.showModal());
 document.getElementById('about-close').addEventListener('click', () => aboutDialog.close());
