@@ -14,7 +14,7 @@ export default {
     const details={};
     for (const key of Object.keys(names)) {if(data[key]!==undefined&&typeof data[key]!=='string')return json({ok:false,message:'Invalid field.'},400);details[key]=(data[key]||'').trim();if(details[key].length>(key==='notes'?3000:254))return json({ok:false,message:'Please shorten your entry.'},400);}
     const required=['date','event','venue','location','flights','hotel','transport','currency','budget','firstName','lastName','email'];
-    if(required.some(key=>!details[key])||data.consent!=='on'||details.artist!=='MR. MAUI'||!/^\S+@\S+\.\S+$/.test(details.email)||/[\r\n]/.test(details.email)) return json({ok:false,message:'Please complete all required fields.'},400);
+    if(required.some(key=>!details[key])||data.consent!=='on'||!['MR. MAUI','ELI ROJAS'].includes(details.artist)||!/^\S+@\S+\.\S+$/.test(details.email)||/[\r\n]/.test(details.email)) return json({ok:false,message:'Please complete all required fields.'},400);
     const date=new Date(details.date+'T00:00:00Z');
     if(!/^\d{4}-\d{2}-\d{2}$/.test(details.date)||Number.isNaN(date.valueOf())||date.toISOString().slice(0,10)!==details.date||details.date<new Date().toISOString().slice(0,10))return json({ok:false,message:'Please choose a valid future event date.'},400);
     if(!['EUR','USD'].includes(details.currency)||!['1,000–3,000','3,000–7,000','7,000–15,000','15,000+'].includes(details.budget)||['flights','hotel','transport'].some(key=>!['Yes','No'].includes(details[key])))return json({ok:false,message:'Please select valid options.'},400);
@@ -32,7 +32,7 @@ export default {
         await env.DB.prepare('INSERT OR IGNORE INTO booking_requests(id,details) VALUES (?,?)').bind(reference,JSON.stringify(details)).run();
       }
       const text=`New booking request — MIAMI 305 Recordings\nReference: ${reference}\n\n`+Object.entries(details).filter(([,value])=>value).map(([key,value])=>`${names[key]}: ${value}`).join('\n');
-      const sent=await fetch('https://yapanel.yadominios.com/api/hosting/correo/enviar',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({sitio:'sis-producciones',token:env.SITE_MAIL_TOKEN,from:{address:'bookings@miami305team.com',name:'MIAMI 305 Recordings'},to:[{address:env.BOOKING_EMAIL}],reply_to:details.email,subject:'Booking request · MR. MAUI',text})});
+      const sent=await fetch('https://yapanel.yadominios.com/api/hosting/correo/enviar',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({sitio:'sis-producciones',token:env.SITE_MAIL_TOKEN,from:{address:'bookings@miami305team.com',name:'MIAMI 305 Recordings'},to:[{address:env.BOOKING_EMAIL}],reply_to:details.email,subject:`Booking request · ${details.artist}`,text})});
       const sentResult=await sent.json().catch(()=>({}));
       if(!sent.ok||sentResult.ok===false)return json({ok:false,message:'Your details were saved, but the notification could not be delivered. Please retry to complete your request.'},502);
       await env.DB.prepare('UPDATE booking_requests SET notification_sent=1 WHERE id=?').bind(reference).run();

@@ -12,6 +12,7 @@ button{font:inherit;color:inherit;cursor:pointer}button:focus-visible{outline:3p
 .nav-actions{display:flex;align-items:center;gap:12px}.nav-actions .about-button{display:inline-flex;align-items:center;justify-content:center;min-height:44px;white-space:nowrap}@media(max-width:650px){.hero nav{flex-wrap:wrap;gap:18px}.nav-actions{gap:8px}.nav-actions .about-button{padding:12px 14px;font-size:10px;letter-spacing:1px}}
 .artist-dialog{width:min(980px,calc(100% - 24px))}.artist-layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:32px;margin-top:25px}.artist-photo{width:100%;height:auto;border-radius:10px;display:block}.artist-dialog h2{font-size:clamp(44px,7vw,76px);margin:12px 0}.artist-dialog h3{font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--blue);margin-top:28px}.artist-dialog p{font-size:15px;line-height:1.7}.artist-meta{color:var(--pink)!important}.artist-links{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}.artist-links a{display:inline-block}.artist-caption{font-size:11px!important;color:var(--muted)!important}.nav-actions{flex-wrap:wrap}@media(max-width:650px){.artist-layout{grid-template-columns:1fr}.artist-photo{max-height:420px;object-fit:contain;background:#081019}.hero nav{justify-content:center}.brand{margin-right:auto}.nav-actions{justify-content:center}.nav-actions .about-button{padding:12px 11px;font-size:9px}.artist-dialog{padding:28px 22px}}
 .booking-dialog{width:min(760px,calc(100% - 24px))}.booking-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}.booking-grid label{display:flex;flex-direction:column;gap:8px;font-size:13px;color:#c5cdd5}.booking-grid input,.booking-grid select,.booking-grid textarea{width:100%;background:#08131d;border:1px solid #ffffff35;border-radius:8px;padding:13px;color:var(--ink);font:inherit;min-height:46px}.booking-grid input:focus,.booking-grid select:focus,.booking-grid textarea:focus{outline:2px solid var(--blue);outline-offset:2px}.booking-grid .wide{grid-column:1/-1}.booking-grid textarea{min-height:110px;resize:vertical}.booking-step[hidden],#booking-review[hidden],#booking-success[hidden],#booking-form[hidden]{display:none}.booking-step{border:0;padding:0;margin:24px 0}.booking-step legend{font-size:22px;font-weight:700;margin-bottom:22px}.booking-actions{display:flex;justify-content:space-between;gap:14px;margin-top:26px}.booking-submit{background:var(--blue);color:#07121b;border-color:var(--blue);font-weight:700}.booking-note{font-size:12px!important}.booking-trap{position:absolute;left:-10000px}.booking-progress{height:3px;background:#ffffff20;margin-top:24px}.booking-progress span{display:block;background:var(--blue);height:100%;width:20%;transition:width .2s}#booking-error{color:#ff9eae;font-size:14px}#booking-review{white-space:pre-wrap;font:inherit;line-height:1.7;color:var(--muted)}.booking-consent{display:flex;gap:12px;align-items:start;font-size:12px;line-height:1.6;color:var(--muted)}.booking-consent input{margin-top:4px}button:disabled{opacity:.6;cursor:wait}body:has(dialog[open]){overflow:hidden}@media(max-width:500px){.booking-grid{grid-template-columns:1fr}.booking-dialog{padding:28px 22px}.booking-dialog h2{font-size:34px}}
+.roster-dialog{width:min(920px,calc(100% - 24px))}.roster-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px;margin-top:30px}.roster-card{border:1px solid #ffffff25;background:#08131d;border-radius:12px;padding:0;overflow:hidden;text-align:left;transition:border-color .2s,transform .2s}.roster-card:hover{border-color:var(--blue);transform:translateY(-3px)}.roster-card img{width:100%;aspect-ratio:4/5;object-fit:cover;object-position:center 20%;display:block}.roster-card strong{display:block;font-size:26px;letter-spacing:-1px;margin:20px 20px 8px}.roster-card .genre{display:block;color:var(--muted);font-size:13px;margin:0 20px 18px;line-height:1.6}.roster-card .profile-link{display:block;color:var(--blue);font-size:10px;letter-spacing:2px;margin:0 20px 22px}.artist-back{margin-top:14px;background:none;border:0;padding:8px 0;color:var(--blue);font-size:11px;letter-spacing:2px}.artist-dialog .eyebrow{margin-top:18px}@media(max-width:500px){.roster-grid{grid-template-columns:1fr}.roster-card img{aspect-ratio:1/1;object-position:center 18%}.roster-dialog{padding:30px 22px}}
 </style>
 </head>
 <body>
@@ -29,9 +30,16 @@ button{font:inherit;color:inherit;cursor:pointer}button:focus-visible{outline:3p
 <p class="welcome">Welcome to the Miami 305 Recordings family!</p>
 <p>The sounds of Africa meet Latin flavor on the most talented platform in the genre. Join our family, showcase your talent, and let the world enjoy your music.</p>
 </dialog>
+<dialog class="roster-dialog" id="roster-dialog" aria-labelledby="roster-title" lang="en">
+<button class="close-dialog" id="roster-close" type="button" aria-label="Close artist list" autofocus>×</button>
+<div class="eyebrow">MIAMI 305 RECORDINGS / ARTIST</div><h2 id="roster-title">Meet the artists.</h2>
+<div class="roster-grid">
+<button class="roster-card" type="button" data-profile="artist-dialog" aria-label="View MR. MAUI profile"><img src="mr-maui.jpeg" alt="Mr. Maui" width="1766" height="2560" loading="lazy"><strong>MR. MAUI</strong><span class="genre">Afro House · Organic House · Afro Latino<br>Gran Canaria, Spain</span><span class="profile-link">VIEW PROFILE &amp; BOOKING ↗</span></button>
+<button class="roster-card" type="button" data-profile="eli-dialog" aria-label="View ELI ROJAS profile"><img src="eli-rojas.jpg" alt="Eli Rojas" loading="lazy"><strong>ELI ROJAS</strong><span class="genre">Latin Tech · Afro-Latin rhythms<br>Ibiza, Spain · Colombia</span><span class="profile-link">VIEW PROFILE &amp; BOOKING ↗</span></button>
+</div></dialog>
 <dialog class="artist-dialog" id="artist-dialog" aria-labelledby="artist-title" lang="en">
 <button class="close-dialog" id="artist-close" type="button" aria-label="Close artist profile" autofocus>×</button>
-<div class="eyebrow">ARTIST / 01</div>
+<button class="artist-back" type="button" data-artist-back>← ALL ARTISTS</button><div class="eyebrow">ARTIST / 01</div>
 <div class="artist-layout"><div><img class="artist-photo" src="mr-maui.jpeg" alt="Portrait of DJ and producer Mr. Maui" width="1766" height="2560" loading="lazy"><p class="artist-caption">Photo: Twentysix Agency</p></div>
 <article><h2 id="artist-title">MR. MAUI</h2><p class="artist-meta">Gran Canaria, Spain · Active since 2022<br>Afro House / Organic House / Afro Latino · 120–125 BPM</p>
 <h3>Biography</h3><p>A Canary Islands DJ and producer with a background in live drumming and percussion, Mr. Maui builds his sound around organic textures, tribal rhythms and Atlantic warmth. His work brings electronic and organic music together through immersive events and DJ sets.</p>
@@ -39,6 +47,16 @@ button{font:inherit;color:inherit;cursor:pointer}button:focus-visible{outline:3p
 <h3>Labels &amp; releases</h3><p>His catalogue includes Café de Anatolia, YHV Records, Caelum Records, Exx Chill, Selvática Records, Batuque Records and Native Music. Featured releases: UMAII, Shadow, Maobak, Ngona and Under The Moonlight.</p>
 <p>Worldwide representation: Twentysix Agency.</p>
 <div class="artist-links"><button class="about-button" type="button" id="booking-open" aria-haspopup="dialog" aria-controls="booking-dialog">BOOKING</button><a class="nav-link" href="https://twentysix-agency.com/mrmaui/" target="_blank" rel="noopener noreferrer">Original profile ↗</a></div>
+</article></div></dialog>
+<dialog class="artist-dialog" id="eli-dialog" aria-labelledby="eli-title" lang="en">
+<button class="close-dialog" type="button" data-eli-close aria-label="Close Eli Rojas profile" autofocus>×</button>
+<button class="artist-back" type="button" data-artist-back>← ALL ARTISTS</button><div class="eyebrow">ARTIST / 02</div>
+<div class="artist-layout"><div><img class="artist-photo" src="eli-rojas.jpg" alt="Portrait of DJ and producer Eli Rojas" loading="lazy"><p class="artist-caption">Photo: Twentysix Agency</p></div>
+<article><h2 id="eli-title">ELI ROJAS</h2><p class="artist-meta">Ibiza, Spain · Colombia · Active since 2015<br>Latin Tech · House · Techno · Afro-Latin rhythms</p>
+<h3>Biography</h3><p>Colombian DJ and producer Eli Rojas brings her cultural roots to electronic music, combining Colombian rhythms with house, techno and Afro-Latin influences. Based in Ibiza, her connection with Blue Marlin Ibiza has shaped a sound built for the island’s dancefloors and international audiences.</p>
+<h3>Stages &amp; collaborations</h3><p>Her international appearances include Tomorrowland and Thailand’s Jungle Experience. She has featured on Groove Box with Sam Divine and collaborated with producers Massianello and Juany Bravo.</p>
+<h3>Labels</h3><p>Her artist profile highlights Toolroom, Make The Girls Dance and Club Sweat.</p><p>Worldwide representation: Twentysix Agency.</p>
+<div class="artist-links"><button class="about-button" type="button" id="eli-booking-open" data-book-artist="ELI ROJAS" aria-haspopup="dialog" aria-controls="booking-dialog">BOOKING</button><a class="nav-link" href="https://twentysix-agency.com/elirojas/" target="_blank" rel="noopener noreferrer">Original profile ↗</a></div>
 </article></div></dialog>
 <dialog class="booking-dialog" id="booking-dialog" aria-labelledby="booking-title" lang="en">
 <button class="close-dialog" id="booking-close" type="button" aria-label="Close booking form">×</button>
@@ -79,8 +97,17 @@ function showBookingStep() {
   bookingDialog.scrollTop = 0;
 }
 function validBookingStep() {return [...bookingSteps[bookingStep].querySelectorAll('input,select,textarea')].every(field=>field.reportValidity());}
-document.getElementById('booking-open').addEventListener('click',()=>{artistDialog.close();bookingDialog.showModal();showBookingStep();});
-function closeBooking(){if(!bookingSending){bookingDialog.close();artistDialog.showModal();document.getElementById('booking-open').focus();}}
+let selectedArtist = 'MR. MAUI';
+let selectedProfileId = 'artist-dialog';
+function openArtistBooking(name,profileId){
+  if(selectedArtist!==name){bookingForm.reset();bookingStep=0;bookingRequestId=crypto.randomUUID();bookingForm.hidden=false;document.getElementById('booking-success').hidden=true;}
+  selectedArtist=name;selectedProfileId=profileId;
+  bookingForm.elements.artist.value=name;document.getElementById('booking-title').textContent=`Book ${name}`;
+  document.getElementById(profileId).close();bookingDialog.showModal();showBookingStep();
+}
+document.getElementById('booking-open').addEventListener('click',()=>openArtistBooking('MR. MAUI','artist-dialog'));
+document.getElementById('eli-booking-open').addEventListener('click',()=>openArtistBooking('ELI ROJAS','eli-dialog'));
+function closeBooking(){if(!bookingSending){bookingDialog.close();document.getElementById(selectedProfileId).showModal();document.getElementById(selectedProfileId==='eli-dialog'?'eli-booking-open':'booking-open').focus();}}
 document.getElementById('booking-close').addEventListener('click',closeBooking);
 document.getElementById('booking-done').addEventListener('click',closeBooking);
 bookingDialog.addEventListener('cancel',event=>{event.preventDefault();closeBooking();});
@@ -94,13 +121,21 @@ bookingForm.addEventListener('submit',async event=>{
   catch(error){bookingError.textContent=error.message||'Connection error. Please try again.';}finally{bookingSending=false;send.disabled=false;send.textContent='SEND REQUEST';document.getElementById('booking-back').disabled=false;}
 });
 const artistDialog = document.getElementById('artist-dialog');
-document.getElementById('artist-open').addEventListener('click', () => artistDialog.showModal());
-document.getElementById('artist-close').addEventListener('click', () => artistDialog.close());
-artistDialog.addEventListener('click', event => {
-  const box = artistDialog.getBoundingClientRect();
-  if (event.target === artistDialog && (event.clientX < box.left || event.clientX > box.right || event.clientY < box.top || event.clientY > box.bottom)) artistDialog.close();
+const rosterDialog = document.getElementById('roster-dialog');
+const eliDialog = document.getElementById('eli-dialog');
+document.getElementById('artist-open').setAttribute('aria-controls','roster-dialog');
+document.getElementById('artist-open').addEventListener('click',()=>rosterDialog.showModal());
+document.getElementById('roster-close').addEventListener('click',()=>rosterDialog.close());
+rosterDialog.addEventListener('close',()=>document.getElementById('artist-open').focus());
+document.querySelectorAll('[data-profile]').forEach(button=>button.addEventListener('click',()=>{rosterDialog.close();document.getElementById(button.dataset.profile).showModal();}));
+function backToArtists(profile){profile.close();rosterDialog.showModal();document.querySelector(`[data-profile="${profile.id}"]`).focus();}
+document.getElementById('artist-close').addEventListener('click',()=>backToArtists(artistDialog));
+document.querySelector('[data-eli-close]').addEventListener('click',()=>backToArtists(eliDialog));
+document.querySelectorAll('[data-artist-back]').forEach(button=>button.addEventListener('click',()=>backToArtists(button.closest('dialog'))));
+[artistDialog,eliDialog].forEach(profile=>{
+  profile.addEventListener('cancel',event=>{event.preventDefault();backToArtists(profile);});
+  profile.addEventListener('click',event=>{const box=profile.getBoundingClientRect();if(event.target===profile&&(event.clientX<box.left||event.clientX>box.right||event.clientY<box.top||event.clientY>box.bottom))backToArtists(profile);});
 });
-artistDialog.addEventListener('close', () => document.getElementById('artist-open').focus());
 const aboutDialog = document.getElementById('about-dialog');
 document.getElementById('about-open').addEventListener('click', () => aboutDialog.showModal());
 document.getElementById('about-close').addEventListener('click', () => aboutDialog.close());
