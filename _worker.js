@@ -1,8 +1,40 @@
 const json = (body, status = 200) => Response.json(body, {status, headers:{'Cache-Control':'no-store'}});
 const names = {artist:'Artist',date:'Event date',event:'Event',venue:'Venue',location:'City / country',time:'Performance time',capacity:'Capacity',flights:'Flights',hotel:'Hotel',transport:'Ground transport',currency:'Currency',budget:'Budget',firstName:'First name',lastName:'Last name',email:'Email',phone:'Phone',company:'Company',referral:'Referred by',notes:'Notes'};
+async function handleContact(request,env){
+  if(request.method!=='POST')return json({ok:false,message:'Method not allowed.'},405);
+  if(request.headers.get('Origin')!==new URL(request.url).origin)return json({ok:false,message:'Please submit from our website.'},403);
+  if(!env.DB||!env.BOOKING_EMAIL||!env.SITE_MAIL_TOKEN)return json({ok:false,message:'Contact is temporarily unavailable. Please try again later.'},503);
+  if(Number(request.headers.get('Content-Length')||0)>16000)return json({ok:false,message:'Request too large.'},413);
+  let data;
+  try{const raw=await request.text();if(raw.length>16000)return json({ok:false,message:'Request too large.'},413);data=JSON.parse(raw);}catch{return json({ok:false,message:'Invalid request.'},400);}
+  if(!data||typeof data!=='object'||data.website||data.consent!=='on')return json({ok:false,message:'Please complete the required fields.'},400);
+  const details={type:'contact'};
+  for(const key of ['name','email','subject','message']){if(typeof data[key]!=='string')return json({ok:false,message:'Please complete the required fields.'},400);details[key]=data[key].trim();if(!details[key]||details[key].length>(key==='message'?3000:254))return json({ok:false,message:'Please check your entries.'},400);}
+  if(!/^\S+@\S+\.\S+$/.test(details.email)||/[\r\n]/.test(details.email)||!['General enquiry','Collaboration','MAMACITA','IBIZA WHITE','KOTINGAA','BEAT CIGAR NATION','PUNTA CANA MUSIC WEEK'].includes(details.subject))return json({ok:false,message:'Please check your email and subject.'},400);
+  if(typeof data.requestId!=='string'||!/^[a-f0-9-]{36}$/i.test(data.requestId))return json({ok:false,message:'Invalid request reference.'},400);
+  const reference=data.requestId;
+  try{
+    const existing=await env.DB.prepare('SELECT id,notification_sent FROM booking_requests WHERE id=?').bind(reference).first();
+    if(existing?.notification_sent)return json({ok:true,reference});
+    if(!existing){
+      const digest=await crypto.subtle.digest('SHA-256',new TextEncoder().encode('contact:'+(request.headers.get('CF-Connecting-IP')||'unknown')+new Date().toISOString().slice(0,10)));
+      const key=Array.from(new Uint8Array(digest)).map(x=>x.toString(16).padStart(2,'0')).join('');
+      const rate=await env.DB.prepare('INSERT INTO booking_limits(key,count) VALUES (?,1) ON CONFLICT(key) DO UPDATE SET count=count+1 RETURNING count').bind(key).first();
+      if(rate.count>10)return json({ok:false,message:'Too many messages. Please try again tomorrow.'},429);
+      await env.DB.prepare('INSERT OR IGNORE INTO booking_requests(id,details) VALUES (?,?)').bind(reference,JSON.stringify(details)).run();
+    }
+    const text=`New contact message — MIAMI 305 Recordings\nReference: ${reference}\nName: ${details.name}\nEmail: ${details.email}\nSubject: ${details.subject}\n\n${details.message}`;
+    const sent=await fetch('https://yapanel.yadominios.com/api/hosting/correo/enviar',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({sitio:'sis-producciones',token:env.SITE_MAIL_TOKEN,from:{address:'bookings@miami305team.com',name:'MIAMI 305 Recordings'},to:[{address:env.BOOKING_EMAIL}],reply_to:details.email,subject:`Contact · ${details.subject}`,text})});
+    const result=await sent.json().catch(()=>({}));
+    if(!sent.ok||result.ok===false)return json({ok:false,message:'Your message was saved, but the notification could not be delivered. Please retry to complete your enquiry.'},502);
+    await env.DB.prepare('UPDATE booking_requests SET notification_sent=1 WHERE id=?').bind(reference).run();
+    return json({ok:true,reference});
+  }catch{return json({ok:false,message:'Unable to send your message. Please try again.'},503);}
+}
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
+    if (url.pathname === '/contact-request') return handleContact(request,env);
     if (url.pathname !== '/booking-request') return env.ASSETS.fetch(request);
     if (request.method !== 'POST') return json({ok:false,message:'Method not allowed.'},405);
     if (request.headers.get('Origin') !== url.origin) return json({ok:false,message:'Please submit from our website.'},403);
