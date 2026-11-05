@@ -11,6 +11,7 @@ button{font:inherit;color:inherit;cursor:pointer}button:focus-visible{outline:3p
 @media(max-width:650px){.hero{min-height:auto;background:#09121c}.hero nav{order:0}.hero::before{content:"";display:block;order:1;width:100%;aspect-ratio:8/5;background:url('ocean-drive.png') center/contain no-repeat}.hero-bottom{order:2;margin-top:0;padding-top:28px}.hero-bottom h1{max-width:none}}
 .nav-actions{display:flex;align-items:center;gap:12px}.nav-actions .about-button{display:inline-flex;align-items:center;justify-content:center;min-height:44px;white-space:nowrap}@media(max-width:650px){.hero nav{flex-wrap:wrap;gap:18px}.nav-actions{gap:8px}.nav-actions .about-button{padding:12px 14px;font-size:10px;letter-spacing:1px}}
 .artist-dialog{width:min(980px,calc(100% - 24px))}.artist-layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:32px;margin-top:25px}.artist-photo{width:100%;height:auto;border-radius:10px;display:block}.artist-dialog h2{font-size:clamp(44px,7vw,76px);margin:12px 0}.artist-dialog h3{font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--blue);margin-top:28px}.artist-dialog p{font-size:15px;line-height:1.7}.artist-meta{color:var(--pink)!important}.artist-links{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}.artist-links a{display:inline-block}.artist-caption{font-size:11px!important;color:var(--muted)!important}.nav-actions{flex-wrap:wrap}@media(max-width:650px){.artist-layout{grid-template-columns:1fr}.artist-photo{max-height:420px;object-fit:contain;background:#081019}.hero nav{justify-content:center}.brand{margin-right:auto}.nav-actions{justify-content:center}.nav-actions .about-button{padding:12px 11px;font-size:9px}.artist-dialog{padding:28px 22px}}
+.booking-dialog{width:min(760px,calc(100% - 24px))}.booking-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}.booking-grid label{display:flex;flex-direction:column;gap:8px;font-size:13px;color:#c5cdd5}.booking-grid input,.booking-grid select,.booking-grid textarea{width:100%;background:#08131d;border:1px solid #ffffff35;border-radius:8px;padding:13px;color:var(--ink);font:inherit;min-height:46px}.booking-grid input:focus,.booking-grid select:focus,.booking-grid textarea:focus{outline:2px solid var(--blue);outline-offset:2px}.booking-grid .wide{grid-column:1/-1}.booking-grid textarea{min-height:110px;resize:vertical}.booking-step[hidden],#booking-review[hidden],#booking-success[hidden],#booking-form[hidden]{display:none}.booking-step{border:0;padding:0;margin:24px 0}.booking-step legend{font-size:22px;font-weight:700;margin-bottom:22px}.booking-actions{display:flex;justify-content:space-between;gap:14px;margin-top:26px}.booking-submit{background:var(--blue);color:#07121b;border-color:var(--blue);font-weight:700}.booking-note{font-size:12px!important}.booking-trap{position:absolute;left:-10000px}.booking-progress{height:3px;background:#ffffff20;margin-top:24px}.booking-progress span{display:block;background:var(--blue);height:100%;width:20%;transition:width .2s}#booking-error{color:#ff9eae;font-size:14px}#booking-review{white-space:pre-wrap;font:inherit;line-height:1.7;color:var(--muted)}.booking-consent{display:flex;gap:12px;align-items:start;font-size:12px;line-height:1.6;color:var(--muted)}.booking-consent input{margin-top:4px}button:disabled{opacity:.6;cursor:wait}body:has(dialog[open]){overflow:hidden}@media(max-width:500px){.booking-grid{grid-template-columns:1fr}.booking-dialog{padding:28px 22px}.booking-dialog h2{font-size:34px}}
 </style>
 </head>
 <body>
@@ -37,9 +38,61 @@ button{font:inherit;color:inherit;cursor:pointer}button:focus-visible{outline:3p
 <h3>Stages &amp; collaborations</h3><p>His appearances include Blue Marlin Ibiza Sky Lounge’s Amazona residency, Selvática, Tropicalia, Papagayo, Hanoi Club and BAKKARA in Las Palmas, with international performances in Africa. He has shared lineups with DJ Chus, G. Zamora, M.E.M.O., Aaron Sevilla, Macarena Hoffman, Wildness Rose and Claudia León.</p>
 <h3>Labels &amp; releases</h3><p>His catalogue includes Café de Anatolia, YHV Records, Caelum Records, Exx Chill, Selvática Records, Batuque Records and Native Music. Featured releases: UMAII, Shadow, Maobak, Ngona and Under The Moonlight.</p>
 <p>Worldwide representation: Twentysix Agency.</p>
-<div class="artist-links"><a class="about-button" href="https://twentysix-agency.com/booking/?artist=Mr.+Maui" target="_blank" rel="noopener noreferrer">BOOKING ↗</a><a class="nav-link" href="https://twentysix-agency.com/mrmaui/" target="_blank" rel="noopener noreferrer">Original profile ↗</a></div>
+<div class="artist-links"><button class="about-button" type="button" id="booking-open" aria-haspopup="dialog" aria-controls="booking-dialog">BOOKING</button><a class="nav-link" href="https://twentysix-agency.com/mrmaui/" target="_blank" rel="noopener noreferrer">Original profile ↗</a></div>
 </article></div></dialog>
+<dialog class="booking-dialog" id="booking-dialog" aria-labelledby="booking-title" lang="en">
+<button class="close-dialog" id="booking-close" type="button" aria-label="Close booking form">×</button>
+<div class="eyebrow">MIAMI 305 RECORDINGS / BOOKING</div><h2 id="booking-title">Book MR. MAUI</h2>
+<div id="booking-success" hidden role="status"><h3>Request received.</h3><p>Your event details have been saved. Our team will contact you using the email you provided.</p><p id="booking-reference"></p><button class="about-button" type="button" id="booking-done">BACK TO ARTIST</button></div>
+<form id="booking-form">
+<p class="booking-note" id="booking-step-label" aria-live="polite">Step 1 of 5 · Your event</p><div class="booking-progress" aria-hidden="true"><span id="booking-progress-bar"></span></div>
+<label class="booking-trap" aria-hidden="true">Website<input name="website" tabindex="-1" autocomplete="off"></label>
+<fieldset class="booking-step"><legend>The artist &amp; your event</legend><div class="booking-grid">
+<label class="wide">Artist<input name="artist" value="MR. MAUI" readonly></label><label>Event date<input type="date" name="date" required></label><label>Event name<input name="event" maxlength="150" required autocomplete="off"></label><label>Venue<input name="venue" maxlength="150" required></label><label>City, country<input name="location" maxlength="150" required></label>
+</div></fieldset>
+<fieldset class="booking-step" hidden><legend>Production &amp; travel</legend><div class="booking-grid">
+<label>Performance time (optional)<input type="time" name="time"></label><label>Venue capacity<select name="capacity"><option value="">Select capacity (optional)</option><option>Under 500</option><option>500–2,000</option><option>2,000–10,000</option><option>10,000+</option></select></label>
+<label>Flights required?<select name="flights" required><option value="">Select</option><option>Yes</option><option>No</option></select></label><label>Hotel required?<select name="hotel" required><option value="">Select</option><option>Yes</option><option>No</option></select></label><label>Ground transport required?<select name="transport" required><option value="">Select</option><option>Yes</option><option>No</option></select></label>
+</div></fieldset>
+<fieldset class="booking-step" hidden><legend>Your offer</legend><div class="booking-grid"><label>Currency<select name="currency" required><option>EUR</option><option>USD</option></select></label><label>Budget<select name="budget" required><option value="">Select range</option><option>1,000–3,000</option><option>3,000–7,000</option><option>7,000–15,000</option><option>15,000+</option></select></label></div></fieldset>
+<fieldset class="booking-step" hidden><legend>Your contact details</legend><div class="booking-grid"><label>First name<input name="firstName" maxlength="80" autocomplete="given-name" required></label><label>Last name<input name="lastName" maxlength="80" autocomplete="family-name" required></label><label class="wide">Email<input type="email" name="email" maxlength="254" autocomplete="email" required></label><label>Phone (optional)<input type="tel" name="phone" maxlength="60" autocomplete="tel"></label><label>Company (optional)<input name="company" maxlength="150" autocomplete="organization"></label><label class="wide">Referred by (optional)<input name="referral" maxlength="150"></label><label class="wide">Notes (optional)<textarea name="notes" maxlength="3000"></textarea></label></div></fieldset>
+<fieldset class="booking-step" hidden><legend>Review your request</legend><div id="booking-review"></div><label class="booking-consent"><input type="checkbox" name="consent" required><span>I agree that MIAMI 305 Recordings may use these details to manage this booking request and contact me. Submitting a request does not confirm a booking.</span></label></fieldset>
+<p id="booking-error" role="alert"></p><div class="booking-actions"><button class="about-button" id="booking-back" type="button" hidden>← BACK</button><button class="about-button booking-submit" id="booking-next" type="button">CONTINUE →</button><button class="about-button booking-submit" id="booking-send" type="submit" hidden>SEND REQUEST</button></div><p class="booking-note">Your request stays with the MIAMI 305 Recordings team. No external booking site is required.</p>
+</form></dialog>
 <script>
+const bookingDialog = document.getElementById('booking-dialog');
+const bookingForm = document.getElementById('booking-form');
+const bookingSteps = [...document.querySelectorAll('.booking-step')];
+const bookingError = document.getElementById('booking-error');
+let bookingStep = 0, bookingSending = false, bookingRequestId = crypto.randomUUID();
+const bookingLabels = ['Your event','Production & travel','Your offer','Contact details','Review'];
+const bookingNames = {artist:'Artist',date:'Event date',event:'Event',venue:'Venue',location:'City / country',time:'Performance time',capacity:'Capacity',flights:'Flights',hotel:'Hotel',transport:'Ground transport',currency:'Currency',budget:'Budget',firstName:'First name',lastName:'Last name',email:'Email',phone:'Phone',company:'Company',referral:'Referred by',notes:'Notes'};
+function showBookingStep() {
+  bookingSteps.forEach((step,index) => {step.hidden = index !== bookingStep;});
+  document.getElementById('booking-back').hidden = bookingStep === 0;
+  document.getElementById('booking-next').hidden = bookingStep === 4;
+  document.getElementById('booking-send').hidden = bookingStep !== 4;
+  document.getElementById('booking-step-label').textContent = `Step ${bookingStep+1} of 5 · ${bookingLabels[bookingStep]}`;
+  document.getElementById('booking-progress-bar').style.width = `${(bookingStep+1)*20}%`;
+  bookingError.textContent = '';
+  if (bookingStep === 4) document.getElementById('booking-review').textContent = Object.entries(Object.fromEntries(new FormData(bookingForm))).filter(([key,value])=>bookingNames[key]&&value).map(([key,value])=>`${bookingNames[key]}: ${value}`).join('\n');
+  bookingDialog.scrollTop = 0;
+}
+function validBookingStep() {return [...bookingSteps[bookingStep].querySelectorAll('input,select,textarea')].every(field=>field.reportValidity());}
+document.getElementById('booking-open').addEventListener('click',()=>{artistDialog.close();bookingDialog.showModal();showBookingStep();});
+function closeBooking(){if(!bookingSending){bookingDialog.close();artistDialog.showModal();document.getElementById('booking-open').focus();}}
+document.getElementById('booking-close').addEventListener('click',closeBooking);
+document.getElementById('booking-done').addEventListener('click',closeBooking);
+bookingDialog.addEventListener('cancel',event=>{event.preventDefault();closeBooking();});
+document.getElementById('booking-next').addEventListener('click',()=>{if(validBookingStep()){bookingStep++;showBookingStep();}});
+document.getElementById('booking-back').addEventListener('click',()=>{bookingStep--;showBookingStep();});
+bookingForm.addEventListener('keydown',event=>{if(event.key==='Enter'&&event.target.tagName!=='TEXTAREA'&&event.target.tagName!=='BUTTON'&&bookingStep<4){event.preventDefault();document.getElementById('booking-next').click();}});
+bookingForm.addEventListener('submit',async event=>{
+  event.preventDefault();if(bookingSending||bookingStep!==4||!validBookingStep())return;
+  bookingSending=true;bookingError.textContent='';const send=document.getElementById('booking-send');send.disabled=true;send.textContent='SENDING…';document.getElementById('booking-back').disabled=true;
+  try{const response=await fetch('/booking-request',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...Object.fromEntries(new FormData(bookingForm)),requestId:bookingRequestId})});const result=await response.json();if(!response.ok||!result.ok)throw new Error(result.message||'Unable to send. Please try again.');bookingForm.hidden=true;document.getElementById('booking-success').hidden=false;document.getElementById('booking-reference').textContent=`Reference: ${result.reference}`;bookingForm.reset();bookingRequestId=crypto.randomUUID();bookingStep=0;}
+  catch(error){bookingError.textContent=error.message||'Connection error. Please try again.';}finally{bookingSending=false;send.disabled=false;send.textContent='SEND REQUEST';document.getElementById('booking-back').disabled=false;}
+});
 const artistDialog = document.getElementById('artist-dialog');
 document.getElementById('artist-open').addEventListener('click', () => artistDialog.showModal());
 document.getElementById('artist-close').addEventListener('click', () => artistDialog.close());
