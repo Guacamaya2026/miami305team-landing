@@ -92,13 +92,13 @@ function openArtistBooking(name,profileId){
   if(selectedArtist!==name || bookingForm.hidden){bookingForm.reset();bookingStep=0;bookingRequestId=crypto.randomUUID();bookingForm.hidden=false;document.getElementById('booking-success').hidden=true;}
   selectedArtist=name;selectedProfileId=profileId;
   bookingForm.elements.artist.value=name;document.getElementById('booking-title').textContent=`Book ${name}`;
-  if(profileId)document.getElementById(profileId).close();bookingDialog.showModal();showBookingStep();
+  if(profileId&&document.getElementById(profileId).tagName==='DIALOG')document.getElementById(profileId).close();bookingDialog.showModal();showBookingStep();
 }
 document.getElementById('booking-open').addEventListener('click',()=>openArtistBooking('MR. MAUI','artist-dialog'));
 document.getElementById('eli-booking-open').addEventListener('click',()=>openArtistBooking('ELI ROJAS','eli-dialog'));
 document.getElementById('karo-booking-open').addEventListener('click',()=>openArtistBooking('KARO GOMEZ','karo-dialog'));
 document.getElementById('miss-m-booking-open').addEventListener('click',()=>openArtistBooking('MISS M','miss-m-dialog'));
-function closeBooking(){if(!bookingSending){bookingDialog.close();if(selectedProfileId){document.getElementById(selectedProfileId).showModal();document.getElementById(selectedProfileId).querySelector('button[aria-controls="booking-dialog"]').focus();}else document.getElementById('nav-booking').focus();}}
+function closeBooking(){if(!bookingSending){bookingDialog.close();if(selectedProfileId){if(document.getElementById(selectedProfileId).tagName==='DIALOG')if(document.getElementById(selectedProfileId).tagName==='DIALOG')if(document.getElementById(selectedProfileId).tagName==='DIALOG')document.getElementById(selectedProfileId).showModal();document.getElementById(selectedProfileId).querySelector('button[aria-controls="booking-dialog"]').focus();}else document.getElementById('nav-booking').focus();}}
 document.getElementById('booking-close').addEventListener('click',closeBooking);
 document.getElementById('booking-done').addEventListener('click',closeBooking);
 bookingDialog.addEventListener('cancel',event=>{event.preventDefault();closeBooking();});
@@ -116,9 +116,10 @@ const menu=document.getElementById('main-menu'),menuToggle=document.getElementBy
 menuToggle.addEventListener('click',()=>{const open=menuToggle.getAttribute('aria-expanded')!=='true';menuToggle.setAttribute('aria-expanded',String(open));menu.classList.toggle('is-open',open);});
 menu.addEventListener('click',event=>{if(event.target.closest('a,button')){menu.classList.remove('is-open');menuToggle.setAttribute('aria-expanded','false');}});
 const artistButtons=[...document.querySelectorAll('[data-profile]')];
-artistButtons.forEach(button=>button.addEventListener('click',()=>document.getElementById(button.dataset.profile).showModal()));
+const profileRoutes={"artist-dialog":"/mr-maui.html","eli-dialog":"/eli-rojas.html","karo-dialog":"/karo-gomez.html","miss-m-dialog":"/miss-m.html"};
+artistButtons.forEach(button=>button.addEventListener('click',()=>location.href=profileRoutes[button.dataset.profile]));
 const profiles=[...document.querySelectorAll('.artist-dialog')];
-function closeProfile(profile){profile.close();document.querySelector('[data-profile="'+profile.id+'"]').focus();}
+function closeProfile(profile){if(profile.tagName!=='DIALOG'){location.href='/#artists';return;}profile.close();document.querySelector('[data-profile="'+profile.id+'"]').focus();}
 document.getElementById('artist-close').addEventListener('click',()=>closeProfile(profiles[0]));
 document.querySelector('[data-eli-close]').addEventListener('click',()=>closeProfile(profiles[1]));
 document.querySelectorAll('[data-profile-close]').forEach(button=>button.addEventListener('click',()=>closeProfile(button.closest('dialog'))));
