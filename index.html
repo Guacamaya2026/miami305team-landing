@@ -120,10 +120,10 @@ const menu=document.getElementById('main-menu'),menuToggle=document.getElementBy
 menuToggle.addEventListener('click',()=>{const open=menuToggle.getAttribute('aria-expanded')!=='true';menuToggle.setAttribute('aria-expanded',String(open));menu.classList.toggle('is-open',open);});
 menu.addEventListener('click',event=>{if(event.target.closest('a,button')){menu.classList.remove('is-open');menuToggle.setAttribute('aria-expanded','false');}});
 const artistButtons=[...document.querySelectorAll('[data-profile]')];
-const profileRoutes={"artist-dialog":"/mr-maui.html","eli-dialog":"/eli-rojas.html","karo-dialog":"/karo-gomez.html","miss-m-dialog":"/miss-m.html","edward-dialog":"/edward-maya.html","mike-dialog":"/mike-syntec.html"};
+const profileRoutes={"artist-dialog":"mr-maui.html","eli-dialog":"eli-rojas.html","karo-dialog":"karo-gomez.html","miss-m-dialog":"miss-m.html","edward-dialog":"edward-maya.html","mike-dialog":"mike-syntec.html"};
 artistButtons.forEach(button=>button.addEventListener('click',()=>location.href=profileRoutes[button.dataset.profile]));
 const profiles=[...document.querySelectorAll('.artist-dialog')];
-function closeProfile(profile){if(profile.tagName!=='DIALOG'){location.href='/#artists';return;}profile.close();document.querySelector('[data-profile="'+profile.id+'"]').focus();}
+function closeProfile(profile){if(profile.tagName!=='DIALOG'){location.href='index.html#artists';return;}profile.close();document.querySelector('[data-profile="'+profile.id+'"]').focus();}
 document.getElementById('artist-close').addEventListener('click',()=>closeProfile(profiles[0]));
 document.querySelector('[data-eli-close]').addEventListener('click',()=>closeProfile(profiles[1]));
 document.querySelectorAll('[data-profile-close]').forEach(button=>button.addEventListener('click',()=>closeProfile(button.closest('dialog'))));
