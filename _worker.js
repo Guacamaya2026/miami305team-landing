@@ -1,6 +1,6 @@
 const json = (body, status = 200) => Response.json(body, {status, headers:{'Cache-Control':'no-store'}});
 const names = {artist:'Artist',date:'Event date',event:'Event',venue:'Venue',location:'City / country',time:'Performance time',capacity:'Capacity',flights:'Flights',hotel:'Hotel',transport:'Ground transport',currency:'Currency',budget:'Budget',firstName:'First name',lastName:'Last name',email:'Email',phone:'Phone',company:'Company',referral:'Referred by',notes:'Notes'};
-async function handleContact(request,env){
+async function handleContact(request,env,kind='contact'){
   if(request.method!=='POST')return json({ok:false,message:'Method not allowed.'},405);
   if(request.headers.get('Origin')!==new URL(request.url).origin)return json({ok:false,message:'Please submit from our website.'},403);
   if(!env.DB||!env.BOOKING_EMAIL||!env.SITE_MAIL_TOKEN)return json({ok:false,message:'Contact is temporarily unavailable. Please try again later.'},503);
@@ -8,16 +8,23 @@ async function handleContact(request,env){
   let data;
   try{const raw=await request.text();if(raw.length>16000)return json({ok:false,message:'Request too large.'},413);data=JSON.parse(raw);}catch{return json({ok:false,message:'Invalid request.'},400);}
   if(!data||typeof data!=='object'||data.website||data.consent!=='on')return json({ok:false,message:'Please complete the required fields.'},400);
-  const details={type:'contact'};
+  if(kind==='demo'){
+    if(typeof data.soundcloud!=='string'||data.soundcloud.length>1500||typeof data.message!=='string'||data.message.length>1200)return json({ok:false,message:'Please check your private SoundCloud link and message.'},400);
+    let valid=false;
+    try{const link=new URL(data.soundcloud.trim());const parts=link.pathname.split('/').filter(Boolean);valid=link.protocol==='https:'&&['soundcloud.com','www.soundcloud.com'].includes(link.hostname)&&!link.username&&!link.password&&((parts.length>=3&&/^s-[a-z0-9]+$/i.test(parts[2]))||(parts.length>=2&&/^s-[a-z0-9]+$/i.test(link.searchParams.get('secret_token')||'')));}catch{}
+    if(!valid)return json({ok:false,message:'Only full private SoundCloud sharing links are accepted.'},400);
+    data.subject='Demo submission';data.message=`Private SoundCloud link: ${data.soundcloud.trim()}\n\n${data.message.trim()}`;
+  }
+  const details={type:kind};
   for(const key of ['name','email','subject','message']){if(typeof data[key]!=='string')return json({ok:false,message:'Please complete the required fields.'},400);details[key]=data[key].trim();if(!details[key]||details[key].length>(key==='message'?3000:254))return json({ok:false,message:'Please check your entries.'},400);}
-  if(!/^\S+@\S+\.\S+$/.test(details.email)||/[\r\n]/.test(details.email)||!['General enquiry','Collaboration','MAMACITA','IBIZA WHITE','KOTINGAA','BEAT CIGAR NATION','PUNTA CANA MUSIC WEEK'].includes(details.subject))return json({ok:false,message:'Please check your email and subject.'},400);
+  if(!/^\S+@\S+\.\S+$/.test(details.email)||/[\r\n]/.test(details.email)||!(kind==='demo'?['Demo submission']:['General enquiry','Collaboration','MAMACITA','IBIZA WHITE','KOTINGAA','BEAT CIGAR NATION','PUNTA CANA MUSIC WEEK']).includes(details.subject))return json({ok:false,message:'Please check your email and subject.'},400);
   if(typeof data.requestId!=='string'||!/^[a-f0-9-]{36}$/i.test(data.requestId))return json({ok:false,message:'Invalid request reference.'},400);
   const reference=data.requestId;
   try{
     const existing=await env.DB.prepare('SELECT id,notification_sent FROM booking_requests WHERE id=?').bind(reference).first();
     if(existing?.notification_sent)return json({ok:true,reference});
     if(!existing){
-      const digest=await crypto.subtle.digest('SHA-256',new TextEncoder().encode('contact:'+(request.headers.get('CF-Connecting-IP')||'unknown')+new Date().toISOString().slice(0,10)));
+      const digest=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(kind+':'+(request.headers.get('CF-Connecting-IP')||'unknown')+new Date().toISOString().slice(0,10)));
       const key=Array.from(new Uint8Array(digest)).map(x=>x.toString(16).padStart(2,'0')).join('');
       const rate=await env.DB.prepare('INSERT INTO booking_limits(key,count) VALUES (?,1) ON CONFLICT(key) DO UPDATE SET count=count+1 RETURNING count').bind(key).first();
       if(rate.count>10)return json({ok:false,message:'Too many messages. Please try again tomorrow.'},429);
@@ -34,6 +41,7 @@ async function handleContact(request,env){
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
+    if (url.pathname === '/demo-request') return handleContact(request,env,'demo');
     if (url.pathname === '/contact-request') return handleContact(request,env);
     if (url.pathname !== '/booking-request') return env.ASSETS.fetch(request);
     if (request.method !== 'POST') return json({ok:false,message:'Method not allowed.'},405);
