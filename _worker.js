@@ -54,7 +54,7 @@ export default {
     const details={};
     for (const key of Object.keys(names)) {if(data[key]!==undefined&&typeof data[key]!=='string')return json({ok:false,message:'Invalid field.'},400);details[key]=(data[key]||'').trim();if(details[key].length>(key==='notes'?3000:254))return json({ok:false,message:'Please shorten your entry.'},400);}
     const required=['date','event','venue','location','flights','hotel','transport','currency','budget','firstName','lastName','email'];
-    if(required.some(key=>!details[key])||data.consent!=='on'||!['MR. MAUI','ELI ROJAS','KARO GOMEZ','MISS M','EDWARD MAYA','MIKE SYNTEC','MELLIZAS'].includes(details.artist)||!/^\S+@\S+\.\S+$/.test(details.email)||/[\r\n]/.test(details.email)) return json({ok:false,message:'Please complete all required fields.'},400);
+    if(required.some(key=>!details[key])||data.consent!=='on'||!['MR. MAUI','ELI ROJAS','KARO GOMEZ','MISS M','EDWARD MAYA','MIKE SYNTEC','MELLIZAS','MANUELA GANDOLFO'].includes(details.artist)||!/^\S+@\S+\.\S+$/.test(details.email)||/[\r\n]/.test(details.email)) return json({ok:false,message:'Please complete all required fields.'},400);
     const date=new Date(details.date+'T00:00:00Z');
     if(!/^\d{4}-\d{2}-\d{2}$/.test(details.date)||Number.isNaN(date.valueOf())||date.toISOString().slice(0,10)!==details.date||details.date<new Date().toISOString().slice(0,10))return json({ok:false,message:'Please choose a valid future event date.'},400);
     if(!['EUR','USD'].includes(details.currency)||!['1,000–3,000','3,000–7,000','7,000–15,000','15,000+'].includes(details.budget)||['flights','hotel','transport'].some(key=>!['Yes','No'].includes(details[key])))return json({ok:false,message:'Please select valid options.'},400);
